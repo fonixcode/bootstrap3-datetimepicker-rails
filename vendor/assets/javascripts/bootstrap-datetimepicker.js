@@ -201,7 +201,23 @@
                             .append($('<th>').addClass('next').attr('data-action', 'next')
                                 .append($('<span>').addClass(options.icons.next))
                                 )
-                            ),
+                            )
+                    
+                var newHeadTemplate = $('<div>').addClass('header-calendar')
+                        .append($('<div>').addClass('month-header-content')
+                                .append($('<span>').addClass(`${options.icons.up} next`).attr('data-action', 'next'))
+                                .append($('<span>').addClass('picker-switch').attr('data-action', 'pickerSwitch'))
+                                .append($('<span>').addClass(`${options.icons.down} previous`).attr('data-action', 'previous'))
+                                )
+                        .append($('<div>').addClass('year-header-content datepicker-months')
+                                .append($('<span>').addClass(`${options.icons.up} next`).attr('data-action', 'next'))
+                                .append($('<span>').addClass('picker-switch').attr('data-action', 'pickerSwitch'))
+                                .append($('<span>').addClass(`${options.icons.down} previous`).attr('data-action', 'previous'))
+                                )
+                
+                var dayHeadTemplate =  $('<thead>')
+                .append($('<tr>'))
+                            ,
                     contTemplate = $('<tbody>')
                         .append($('<tr>')
                             .append($('<td>').attr('colspan', (options.calendarWeeks ? '8' : '7')))
@@ -209,8 +225,9 @@
 
                 return [
                     $('<div>').addClass('datepicker-days')
-                        .append($('<table>').addClass('table-condensed')
-                            .append(headTemplate)
+                        .append(newHeadTemplate)
+                            .append($('<table>').addClass('table-condensed')
+                            .append(dayHeadTemplate)
                             .append($('<tbody>'))
                             ),
                     $('<div>').addClass('datepicker-months')
@@ -316,6 +333,17 @@
                 }
                 if (!options.sideBySide && hasDate() && hasTime()) {
                     row.push($('<td>').append($('<a>').attr({ 'data-action': 'togglePicker', 'title': options.tooltips.selectTime }).append($('<span>').addClass(options.icons.time))));
+                    // return $('<div>').addClass('footer-time')
+                    //     .append($('<div>').addClass('hours-footer-content')
+                    //         .append($('<span>').addClass(`${options.icons.up} next`).attr('data-action', 'next'))
+                    //         .append($('<span>').addClass('picker-switch').attr('data-action', 'pickerSwitch'))
+                    //         .append($('<span>').addClass(`${options.icons.down} previous`).attr('data-action', 'previous'))
+                    //         )
+                    //     .append($('<div>').addClass('minutes-footer-content datepicker-months')
+                    //             .append($('<span>').addClass(`${options.icons.up} next`).attr('data-action', 'next'))
+                    //             .append($('<span>').addClass('picker-switch').attr('data-action', 'pickerSwitch'))
+                    //             .append($('<span>').addClass(`${options.icons.down} previous`).attr('data-action', 'previous'))
+                    //             );
                 }
                 if (options.showClear) {
                     row.push($('<td>').append($('<a>').attr({ 'data-action': 'clear', 'title': options.tooltips.clear }).append($('<span>').addClass(options.icons.clear))));
@@ -501,6 +529,7 @@
             },
 
             fillDow = function () {
+                viewDate._locale._week.dow = 1
                 var row = $('<tr>'),
                     currentDate = viewDate.clone().startOf('w').startOf('d');
 
@@ -509,10 +538,11 @@
                 }
 
                 while (currentDate.isBefore(viewDate.clone().endOf('w'))) {
-                    row.append($('<th>').addClass('dow').text(currentDate.format('dd')));
+                    row.append($('<th>').addClass('dow').text(currentDate.format('dd').charAt()));
                     currentDate.add(1, 'd');
                 }
                 widget.find('.datepicker-days thead').append(row);
+                widget.find('.datepicker-days thead').append("<tr class='divider'></tr>");
             },
 
             isInDisabledDates = function (testDate) {
@@ -687,7 +717,8 @@
 
             fillDate = function () {
                 var daysView = widget.find('.datepicker-days'),
-                    daysViewHeader = daysView.find('th'),
+                    daysViewHeader = daysView.find('.month-header-content'),
+                    yearsViewHeader = daysView.find('.year-header-content'),
                     currentDate,
                     html = [],
                     row,
@@ -697,13 +728,18 @@
                 if (!hasDate()) {
                     return;
                 }
+                daysViewHeader.eq(0).find('span').eq(0).attr('title', options.tooltips.nextMonth);
+                daysViewHeader.eq(0).find('span').eq(1).attr('title', options.tooltips.selectMonth);
+                daysViewHeader.eq(0).find('span').eq(2).attr('title', options.tooltips.prevMonth);
+                yearsViewHeader.eq(0).find('span').eq(0).attr('title', options.tooltips.nextYear);
+                yearsViewHeader.eq(0).find('span').eq(1).attr('title', options.tooltips.selectYear);
+                yearsViewHeader.eq(0).find('span').eq(2).attr('title', options.tooltips.prevYear);
 
-                daysViewHeader.eq(0).find('span').attr('title', options.tooltips.prevMonth);
-                daysViewHeader.eq(1).attr('title', options.tooltips.selectMonth);
-                daysViewHeader.eq(2).find('span').attr('title', options.tooltips.nextMonth);
 
                 daysView.find('.disabled').removeClass('disabled');
-                daysViewHeader.eq(1).text(viewDate.format(options.dayViewHeaderFormat));
+                daysViewHeader.eq(0).find('span').eq(1).text(viewDate.format('MMMM'));
+                yearsViewHeader.eq(0).find('span').eq(1).text(viewDate.year());
+
 
                 if (!isValid(viewDate.clone().subtract(1, 'M'), 'M')) {
                     daysViewHeader.eq(0).addClass('disabled');
@@ -746,7 +782,7 @@
                         date: currentDate,
                         classNames: clsNames
                     });
-                    row.append('<td data-action="selectDay" data-day="' + currentDate.format('L') + '" class="' + clsNames.join(' ') + '">' + currentDate.date() + '</td>');
+                    row.append('<td data-action="selectDay" data-day="' + currentDate.format('L') + '" class="' + clsNames.join(' ') + '">' + `<div class="day-content">${currentDate.date()}</div>` + '</td>');
                     currentDate.add(1, 'd');
                 }
 
@@ -974,15 +1010,29 @@
              *
              ********************************************************************************/
             actions = {
-                next: function () {
+                next: function (e) {
                     var navFnc = datePickerModes[currentViewMode].navFnc;
+                    if(currentViewMode === 0){
+                        if($(e.target).attr('title') === 'Next Month'){
+                            navFnc = datePickerModes[currentViewMode].navFnc;
+                        }else{
+                            navFnc = datePickerModes[1].navFnc;
+                        }    
+                    }
                     viewDate.add(datePickerModes[currentViewMode].navStep, navFnc);
                     fillDate();
                     viewUpdate(navFnc);
                 },
 
-                previous: function () {
+                previous: function (e) {
                     var navFnc = datePickerModes[currentViewMode].navFnc;
+                    if(currentViewMode === 0){
+                        if($(e.target).attr('title') === 'Previous Month'){
+                            navFnc = datePickerModes[currentViewMode].navFnc;
+                        }else{
+                            navFnc = datePickerModes[1].navFnc;
+                        }    
+                    }
                     viewDate.subtract(datePickerModes[currentViewMode].navStep, navFnc);
                     fillDate();
                     viewUpdate(navFnc);

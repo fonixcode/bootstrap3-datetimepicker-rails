@@ -253,6 +253,7 @@
                     middleRow = $('<tr>'),
                     bottomRow = $('<tr>');
 
+                // +++========================================== //
                 if (isEnabled('h')) {
                     topRow.append($('<td>')
                         .append($('<a>').attr({ href: '#', tabindex: '-1', 'title': options.tooltips.incrementHour }).addClass('btn').attr('data-action', 'incrementHours').append($('<span>').addClass(options.icons.up))));
@@ -261,6 +262,7 @@
                     bottomRow.append($('<td>')
                         .append($('<a>').attr({ href: '#', tabindex: '-1', 'title': options.tooltips.decrementHour }).addClass('btn').attr('data-action', 'decrementHours').append($('<span>').addClass(options.icons.down))));
                 }
+                // +++========================================== //
                 if (isEnabled('m')) {
                     if (isEnabled('h')) {
                         topRow.append($('<td>').addClass('separator'));
@@ -328,22 +330,32 @@
 
             getToolbar = function () {
                 var row = [];
+                let hour = date.hours();
                 if (options.showTodayButton) {
                     row.push($('<td>').append($('<a>').attr({ 'data-action': 'today', 'title': options.tooltips.today }).append($('<span>').addClass(options.icons.today))));
                 }
                 if (!options.sideBySide && hasDate() && hasTime()) {
-                    row.push($('<td>').append($('<a>').attr({ 'data-action': 'togglePicker', 'title': options.tooltips.selectTime }).append($('<span>').addClass(options.icons.time))));
-                    // return $('<div>').addClass('footer-time')
-                    //     .append($('<div>').addClass('hours-footer-content')
-                    //         .append($('<span>').addClass(`${options.icons.up} next`).attr('data-action', 'next'))
-                    //         .append($('<span>').addClass('picker-switch').attr('data-action', 'pickerSwitch'))
-                    //         .append($('<span>').addClass(`${options.icons.down} previous`).attr('data-action', 'previous'))
-                    //         )
-                    //     .append($('<div>').addClass('minutes-footer-content datepicker-months')
-                    //             .append($('<span>').addClass(`${options.icons.up} next`).attr('data-action', 'next'))
-                    //             .append($('<span>').addClass('picker-switch').attr('data-action', 'pickerSwitch'))
-                    //             .append($('<span>').addClass(`${options.icons.down} previous`).attr('data-action', 'previous'))
-                    //             );
+                    // row.push($('<td>').append($('<a>').attr({ 'data-action': 'togglePicker', 'title': options.tooltips.selectTime }).append($('<span>').addClass(options.icons.time))));
+                    return $('<div>').addClass('footer-time')
+                        .append($('<div>').addClass('hours-footer-content')
+                            .append($('<span>').addClass(`${options.icons.up} next`).attr({ href: '#', tabindex: '-1', 'title': options.tooltips.incrementHour }).attr('data-action', 'incrementHours'))
+                            .append($('<span>').addClass('timepicker-hour').attr({ 'data-time-component': 'hours', 'title': options.tooltips.pickHour }).attr('data-action', 'showHours'))
+                            .append($('<span>').addClass(`${options.icons.down} previous`).attr({ href: '#', tabindex: '-1', 'title': options.tooltips.decrementHour }).attr('data-action', 'decrementHours'))
+                            )
+                            .append($('<div>').addClass('separator')
+                                .append($('<span>').addClass('separator').html(':')))
+                        .append($('<div>').addClass('minutes-footer-content')
+                                .append($('<span>').addClass(`${options.icons.up} next`).attr({ href: '#', tabindex: '-1', 'title': options.tooltips.incrementMinute }).attr('data-action', 'incrementMinutes'))
+                                .append($('<span>').addClass('timepicker-minute').attr({ 'data-time-component': 'minutes', 'title': options.tooltips.pickMinute }).attr('data-action', 'showMinutes'))
+                                .append($('<span>').addClass(`${options.icons.down} previous`).attr({ href: '#', tabindex: '-1', 'title': options.tooltips.decrementMinute }).attr('data-action', 'decrementMinutes'))
+                                )
+                        .append($('<div>').addClass('hours-content-12')
+                                .append($('<span>').addClass(`box ${hour < 12 && 'selected'}`).html('AM').attr({ 'data-action': 'togglePeriod', tabindex: '-1', 'title': 'AM' }))
+                                .append($('<span>').addClass(`box ${hour >= 12 && 'selected'}`).html('PM').attr({ 'data-action': 'togglePeriod', tabindex: '-1', 'title': 'PM' }))
+                                )
+                        .append($('<div>').addClass('button-area')
+                                .append($('<button>').addClass('primary-btn').html('Done').attr({ 'data-action': 'close'}))
+                                )
                 }
                 if (options.showClear) {
                     row.push($('<td>').append($('<a>').attr({ 'data-action': 'clear', 'title': options.tooltips.clear }).append($('<span>').addClass(options.icons.clear))));
@@ -850,31 +862,31 @@
 
                 table.empty().append(html);
             },
+            // ==================================================== //
+                fillTime = function () {
+                    // var toggle, newDate, timeComponents = widget.find('.timepicker span[data-time-component]');
+                    var toggle, newDate, timeComponents = widget.find('.footer-time span[data-time-component]');
+                    if (!use24Hours) {
+                        toggle = widget.find('.timepicker [data-action=togglePeriod]');
+                        newDate = date.clone().add((date.hours() >= 12) ? -12 : 12, 'h');
 
-            fillTime = function () {
-                var toggle, newDate, timeComponents = widget.find('.timepicker span[data-time-component]');
+                        toggle.text(date.format('A'));
 
-                if (!use24Hours) {
-                    toggle = widget.find('.timepicker [data-action=togglePeriod]');
-                    newDate = date.clone().add((date.hours() >= 12) ? -12 : 12, 'h');
-
-                    toggle.text(date.format('A'));
-
-                    if (isValid(newDate, 'h')) {
-                        toggle.removeClass('disabled');
-                    } else {
-                        toggle.addClass('disabled');
+                        if (isValid(newDate, 'h')) {
+                            toggle.removeClass('disabled');
+                        } else {
+                            toggle.addClass('disabled');
+                        }
                     }
-                }
-                timeComponents.filter('[data-time-component=hours]').text(date.format(use24Hours ? 'HH' : 'hh'));
-                timeComponents.filter('[data-time-component=minutes]').text(date.format('mm'));
-                timeComponents.filter('[data-time-component=seconds]').text(date.format('ss'));
+                    timeComponents.filter('[data-time-component=hours]').text(date.format(use24Hours ? 'HH' : 'hh'));
+                    timeComponents.filter('[data-time-component=minutes]').text(date.format('mm'));
+                    timeComponents.filter('[data-time-component=seconds]').text(date.format('ss'));
 
-                fillHours();
-                fillMinutes();
-                fillSeconds();
-            },
-
+                    fillHours();
+                    fillMinutes();
+                    fillSeconds();
+                },
+            // ==================================================== //
             update = function () {
                 if (!widget) {
                     return;
@@ -1003,6 +1015,18 @@
                 //inputDate.locale(options.locale);
                 return inputDate;
             },
+            toggleTimerPeriod = function () {
+                let hour = date.hours();
+                if (hour < 12) {
+                    $(".box[title='AM']").addClass('selected');
+                    $(".box[title='AM']").next().removeClass('selected');
+                }
+
+                if(hour >= 12){
+                    $(".box[title='PM']").addClass('selected');
+                    $(".box[title='PM']").prev().removeClass('selected');
+                }
+            },
 
             /********************************************************************************
              *
@@ -1013,6 +1037,7 @@
                 next: function (e) {
                     var navFnc = datePickerModes[currentViewMode].navFnc;
                     if(currentViewMode === 0){
+                        console.log(currentViewMode)
                         if($(e.target).attr('title') === 'Next Month'){
                             navFnc = datePickerModes[currentViewMode].navFnc;
                         }else{
@@ -1027,6 +1052,7 @@
                 previous: function (e) {
                     var navFnc = datePickerModes[currentViewMode].navFnc;
                     if(currentViewMode === 0){
+                        console.log(currentViewMode)
                         if($(e.target).attr('title') === 'Previous Month'){
                             navFnc = datePickerModes[currentViewMode].navFnc;
                         }else{
@@ -1105,6 +1131,7 @@
                     var newDate = date.clone().add(1, 'h');
                     if (isValid(newDate, 'h')) {
                         setValue(newDate);
+                        toggleTimerPeriod();
                     }
                 },
 
@@ -1112,6 +1139,7 @@
                     var newDate = date.clone().add(options.stepping, 'm');
                     if (isValid(newDate, 'm')) {
                         setValue(newDate);
+                        toggleTimerPeriod();
                     }
                 },
 
@@ -1119,6 +1147,8 @@
                     var newDate = date.clone().add(1, 's');
                     if (isValid(newDate, 's')) {
                         setValue(newDate);
+                        toggleTimerPeriod();
+
                     }
                 },
 
@@ -1126,6 +1156,7 @@
                     var newDate = date.clone().subtract(1, 'h');
                     if (isValid(newDate, 'h')) {
                         setValue(newDate);
+                        toggleTimerPeriod();
                     }
                 },
 
@@ -1133,6 +1164,7 @@
                     var newDate = date.clone().subtract(options.stepping, 'm');
                     if (isValid(newDate, 'm')) {
                         setValue(newDate);
+                        toggleTimerPeriod();
                     }
                 },
 
@@ -1140,11 +1172,20 @@
                     var newDate = date.clone().subtract(1, 's');
                     if (isValid(newDate, 's')) {
                         setValue(newDate);
+                        toggleTimerPeriod();
                     }
                 },
 
-                togglePeriod: function () {
-                    setValue(date.clone().add((date.hours() >= 12) ? -12 : 12, 'h'));
+                togglePeriod: function (e) {
+                    if ($(e.target).attr('title') === 'PM' || $(e.target).attr('title') === 'AM') {
+                    if ($(e.target).attr('title') === 'PM' && date.hours() >= 12) return;
+                    if ($(e.target).attr('title') === 'AM' && date.hours() < 12) return;
+                    }
+
+                    let hour = date.hours() >= 12 ? -12 : 12;
+
+                    setValue(date.clone().add(hour, 'h'));
+                    toggleTimerPeriod();
                 },
 
                 togglePicker: function (e) {
@@ -2512,10 +2553,10 @@
         icons: {
             time: 'glyphicon glyphicon-time',
             date: 'glyphicon glyphicon-calendar',
-            up: 'glyphicon glyphicon-chevron-up',
-            down: 'glyphicon glyphicon-chevron-down',
-            previous: 'glyphicon glyphicon-chevron-left',
-            next: 'glyphicon glyphicon-chevron-right',
+            up: 'glyphicon glyphicon-menu-up',
+            down: 'glyphicon glyphicon-menu-down',
+            previous: 'glyphicon glyphicon-menu-left',
+            next: 'glyphicon glyphicon-menu-right',
             today: 'glyphicon glyphicon-screenshot',
             clear: 'glyphicon glyphicon-trash',
             close: 'glyphicon glyphicon-remove'

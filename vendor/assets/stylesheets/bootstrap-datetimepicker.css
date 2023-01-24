@@ -3,7 +3,11 @@
  * version : 4.17.47
  * https://github.com/Eonasdan/bootstrap-datetimepicker/
  */
- .bootstrap-datetimepicker-widget {
+ .glyphicon {
+  font-size: 10px !important;
+  cursor: pointer !important; 
+}
+.bootstrap-datetimepicker-widget {
   list-style: none;
 }
 .bootstrap-datetimepicker-widget.dropdown-menu {
@@ -301,6 +305,7 @@
   height: 28px;
   display: flex;
   justify-content: center;
+  font-family: "Roboto";
   align-items: center;
 }
 .bootstrap-datetimepicker-widget table td {
@@ -431,13 +436,91 @@
 .bootstrap-datetimepicker-widget .footer-time{
   width: inherit;
   display: flex;
-  gap: 10px;
+  margin-top: 14px;
 }
+
+.bootstrap-datetimepicker-widget .footer-time .hours-footer-content, 
+.bootstrap-datetimepicker-widget .footer-time .minutes-footer-content{  
+  width: 30px !important;
+  gap: 6px;
+}
+
+.bootstrap-datetimepicker-widget .footer-time .separator{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 21px;
+  width: 18px;
+}
+ 
+.bootstrap-datetimepicker-widget .footer-time .hours-content-12{
+  display: flex;
+  justify-content: space-around;
+  width: 100px;
+  margin-left: 6px;
+  align-items: center;
+}
+
+.bootstrap-datetimepicker-widget .footer-time .hours-content-12 .box{
+  width: 40px;
+  height: 24px;
+  border-radius: 4px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: "Roboto";
+}
+
+.bootstrap-datetimepicker-widget .footer-time .hours-content-12 .box.selected{
+  border: 1px solid #777777;
+}
+
+.bootstrap-datetimepicker-widget .footer-time .button-area{
+  display: flex;
+  width: 100%;
+  justify-content: flex-end;
+  align-items: center;
+}
+
+.bootstrap-datetimepicker-widget .footer-time .button-area .primary-btn{
+  height: 35px !important;
+  width: 122px !important;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  white-space: nowrap;
+  font-weight: 600;
+  font-size: 14px;
+  border: none;
+  padding: 0px 8px;
+  min-width: 100px;
+  background: #3A3DD5;
+  color: #FFFFFF;
+  border-radius: 8px;
+}
+
+.bootstrap-datetimepicker-widget .footer-time .button-area .primary-btn:hover{
+  border: 1.5px #3A3DD5CC solid;
+  background-color: #3A3DD508;
+  color: #3A3DD5;
+}
+
+.bootstrap-datetimepicker-widget .footer-time .button-area .primary-btn:focus{
+  border: 1.5px #FFFFFF solid;
+  background-color: #3A3DD5;
+  color: #FFFFFF;
+  -webkit-box-shadow: 1px 1px 13px 2px #3a3dd5;
+  box-shadow: 1px 1px 13px 2px #3a3dd5;
+}
+
 .bootstrap-datetimepicker-widget .datepicker-days .header-calendar .month-header-content,
 .bootstrap-datetimepicker-widget .datepicker-days .header-calendar .year-header-content,
 .bootstrap-datetimepicker-widget .footer-time .hours-footer-content,
 .bootstrap-datetimepicker-widget .footer-time .minutes-footer-content{
   display: flex;
   flex-direction: column; 
-  align-items: center
+  align-items: center;
+  gap: 6px;
 }
+

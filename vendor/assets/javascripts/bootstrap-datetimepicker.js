@@ -164,6 +164,7 @@
                 if (typeof granularity !== 'string' || granularity.length > 1) {
                     throw new TypeError('isEnabled expects a single character string parameter');
                 }
+
                 switch (granularity) {
                     case 'y':
                         return actualFormat.indexOf('Y') !== -1;
@@ -345,26 +346,6 @@
                 }
                 if (!options.sideBySide && hasDate() && hasTime()) {
                     // row.push($('<td>').append($('<a>').attr({ 'data-action': 'togglePicker', 'title': options.tooltips.selectTime }).append($('<span>').addClass(options.icons.time))));
-                    return $('<div>').addClass('footer-time')
-                        .append($('<div>').addClass('hours-footer-content')
-                            .append($('<span>').addClass(`${options.icons.previous} previous`).attr({ href: '#', tabindex: '-1', 'title': options.tooltips.decrementHour }).attr('data-action', 'decrementHours'))
-                            .append($('<input>').val(viewDate.hours()).addClass('timepicker-hour').attr({ 'data-time-component': 'hours', 'title': options.tooltips.pickHour, 'maxlength':"2" }).attr('data-action', 'focusHoursInput'))
-                            .append($('<span>').addClass(`${options.icons.next} next`).attr({ href: '#', tabindex: '-1', 'title': options.tooltips.incrementHour }).attr('data-action', 'incrementHours'))
-                            )
-                            .append($('<div>').addClass('separator')
-                                .append($('<span>').addClass('separator').html(':')))
-                        .append($('<div>').addClass('minutes-footer-content')
-                                .append($('<span>').addClass(`${options.icons.previous} previous`).attr({ href: '#', tabindex: '-1', 'title': options.tooltips.decrementMinute }).attr('data-action', 'decrementMinutes'))
-                                .append($('<input>').val(viewDate.minute()).addClass('timepicker-minute').attr({ 'data-time-component': 'minutes', 'title': options.tooltips.pickMinute, 'maxlength':"2" }).attr('data-action', 'focusMinutesInput'))
-                                .append($('<span>').addClass(`${options.icons.next} next`).attr({ href: '#', tabindex: '-1', 'title': options.tooltips.incrementMinute }).attr('data-action', 'incrementMinutes'))
-                                )
-                        // .append($('<div>').addClass('hours-content-12')
-                        //         .append($('<span>').addClass(`box ${hour < 12 && 'selected'}`).html('AM').attr({ 'data-action': 'togglePeriod', tabindex: '-1', 'title': 'AM' }))
-                        //         .append($('<span>').addClass(`box ${hour >= 12 && 'selected'}`).html('PM').attr({ 'data-action': 'togglePeriod', tabindex: '-1', 'title': 'PM' }))
-                        //         )
-                        .append($('<div>').addClass('button-area')
-                                .append($('<button>').addClass('primary-btn').html('Done').attr({ 'data-action': 'close'}))
-                                )
                 }
                 if (options.showClear) {
                     row.push($('<td>').append($('<a>').attr({ 'data-action': 'clear', 'title': options.tooltips.clear }).append($('<span>').addClass(options.icons.clear))));
@@ -563,7 +544,27 @@
                     currentDate.add(1, 'd');
                 }
                 widget.find('.datepicker-days thead').append(row);
-                widget.find('.datepicker-days thead').append("<tr class='divider'></tr>");
+                if (!options.sideBySide && hasDate() && hasTime()) {                 
+                    widget.find('.datepicker-days').append(
+                        $('<div>').addClass('footer-time')
+                        .append($('<div>').addClass('hours-footer-content')
+                            .append($('<span>').addClass(`${options.icons.previous} previous`).attr({ href: '#', tabindex: '-1', 'title': options.tooltips.decrementHour }).attr('data-action', 'decrementHours'))
+                            .append($('<input>').val(viewDate.hours().toString().padStart(2, '0')).addClass('timepicker-hour').attr({ 'data-time-component': 'hours', 'title': options.tooltips.pickHour, 'maxlength':"3" }).attr('data-action', 'focusHoursInput'))
+                            .append($('<span>').addClass(`${options.icons.next} next`).attr({ href: '#', tabindex: '-1', 'title': options.tooltips.incrementHour }).attr('data-action', 'incrementHours'))
+                            )
+                            .append($('<div>').addClass('separator')
+                                .append($('<span>').addClass('separator').html(':')))
+                        .append($('<div>').addClass('minutes-footer-content')
+                                .append($('<span>').addClass(`${options.icons.previous} previous`).attr({ href: '#', tabindex: '-1', 'title': options.tooltips.decrementMinute }).attr('data-action', 'decrementMinutes'))
+                                .append($('<input>').val(viewDate.minute().toString().padStart(2, '0')).addClass('timepicker-minute').attr({ 'data-time-component': 'minutes', 'title': options.tooltips.pickMinute, 'maxlength':"3" }).attr('data-action', 'focusMinutesInput'))
+                                .append($('<span>').addClass(`${options.icons.next} next`).attr({ href: '#', tabindex: '-1', 'title': options.tooltips.incrementMinute }).attr('data-action', 'incrementMinutes'))
+                                )
+                        .append($('<div>').addClass('button-area')
+                                .append($('<button>').addClass('primary-btn').html('Done').attr({ 'data-action': 'close'}))
+                                )
+                    );
+                }
+                widget.find('.datepicker-days table').append("<div class='divider'></div>");
             },
 
             isInDisabledDates = function (testDate) {
@@ -802,7 +803,7 @@
                         date: currentDate,
                         classNames: clsNames
                     });
-                    row.append('<td data-action="selectDay" data-day="' + currentDate.format('L') + '" class="' + clsNames.join(' ') + '">' + `<div class="day-content">${currentDate.date()}</div>` + '</td>');
+                    row.append('<td class="' + clsNames.join(' ') + '">' + `<div style="display:flex; justify-content: center;" ><div data-action="selectDay" class="day-content ${clsNames[1]}" data-day="${currentDate.format('L')}" >${currentDate.date()}</div></div>` + '</td>');
                     currentDate.add(1, 'd');
                 }
 
@@ -937,7 +938,10 @@
                 if (isValid(targetMoment)) {
                     date = targetMoment;
                     viewDate = date.clone();
-                    if(!hasTime()) input.val(date.format(actualFormat))
+                    if(!hasTime()) {
+                        input.val(date.format(actualFormat))
+                        input.removeClass('focus');
+                    }
                     element.data('date', date.format(actualFormat));
                     unset = false;
                     update();
@@ -1002,7 +1006,7 @@
                 });
 
                 input.blur();
-
+                input.removeClass('focus');
                 viewDate = date.clone();
 
                 return picker;
@@ -1159,7 +1163,8 @@
 
                 decrementMinutes: function () {
                     var newDate = date.clone().subtract(options.stepping, 'm');
-                    if (isValid(newDate, 'm')) {                        setValue(newDate);
+                    if (isValid(newDate, 'm')) {
+                        setValue(newDate);
                         onChangeMinutes();
                     }
                 },
@@ -1265,14 +1270,15 @@
                 },
 
                 close: function () {
-                    const hour = parseInt($('.timepicker-hour').val());
+                    const hour = parseInt($('.timepicker-hour').val().toString().substr(0, 2));
+
                     if (hour < 0 || hour > 23) {
                         return;
                     }
                     date.hour(hour);
                     setValue(date);
 
-                    const minute = parseInt($('.timepicker-minute').val());
+                    const minute = parseInt($('.timepicker-minute').val().toString().substr(0, 2));
                     if (minute < 0 || minute > 60) {
                         return;
                     }
@@ -1348,6 +1354,7 @@
                 }
                 place();
                 widget.show();
+                input.addClass('focus')
                 if (options.focusOnShow && !input.is(':focus')) {
                     input.addClass('focus');
                 }
@@ -1430,7 +1437,7 @@
             attachDatePickerElementEvents = function () {
                 input.on({
                     'change': change,
-                    'blur': options.debug ? '' : hide,
+                    'blur': hasTime() ? '' : hide,
                     'keydown': keydown,
                     'keyup': keyup,
                     'focus': options.allowInputToggle ? show : ''
@@ -2472,19 +2479,26 @@
             show();
         }
         $(document).on('ready', () => {
-            $(document).on('change', '.timepicker-hour', (e) => {
-                const hour = parseInt($(e.target).val());
+            $(document).on('keyup', '.timepicker-hour', (e) => {
+
+                const currentValue = $(e.target).val().toString().substr(0, 2);
+                $(e.target).val(currentValue > 23 ? '23' : currentValue.padStart(2, '0'));
+                const hour = parseInt(currentValue || 0);
                 if (hour < 0 || hour > 23) {
                     return;
                 }
+
                 date.hour(hour);
                 setValue(date);
             })
-            $(document).on('change', '.timepicker-minute', (e) => {
-                const minute = parseInt($(e.target).val());
+            $(document).on('keyup', '.timepicker-minute', (e) => {
+                const currentValue = $(e.target).val().toString().substr(0, 2);
+                $(e.target).val(currentValue > 60 ? '59' : currentValue.padStart(2, '0'));
+                const minute = parseInt($(e.target).val().trim() || 0);
                 if (minute < 0 || minute > 60) {
                     return;
                 }
+
                 date.minute(minute);
                 setValue(date);
             })

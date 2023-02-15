@@ -93,7 +93,7 @@
 .bootstrap-datetimepicker-widget .timepicker-second {
   width: 30px;
   font-weight: bold;
-  font-size: 1.2em;
+  font-size: 23px;
   border: none;
   padding: 0;
   text-align: center;
@@ -203,6 +203,7 @@
 }
 .bootstrap-datetimepicker-widget .picker-switch {
   text-align: center;
+  font-size: 18px;
 }
 .bootstrap-datetimepicker-widget .picker-switch::after {
   position: absolute;
@@ -238,7 +239,7 @@
   background: #00053E;
   position: absolute;
   left: 27px;
-  top: 96px;
+  top: 104px;
 }
 
 .bootstrap-datetimepicker-widget table td,
@@ -255,6 +256,7 @@
 
 .bootstrap-datetimepicker-widget table th.dow {
   font-family: "Roboto-thin", Helvetica, Arial, sans-serif;
+  font-size: 20px
 }
 .bootstrap-datetimepicker-widget table th:first-child {
   /* padding: 5px 12px 5px 0px !important; */
@@ -310,12 +312,13 @@
   background: #eeeeee;
 }
 .bootstrap-datetimepicker-widget table td .day-content {
-  border-radius: 15px;
-  width: 28px;
-  height: 28px;
+  border-radius: 18px;
+  width: 36px;
+  height: 36px;
   display: flex;
   justify-content: center;
   font-family: "Roboto";
+  font-size: 20px;
   align-items: center;
 }
 .bootstrap-datetimepicker-widget table td {
@@ -338,6 +341,7 @@
 .bootstrap-datetimepicker-widget table td.day .day-content:active {
   background: #00053E;
   color: #fff;
+  font-family: "Roboto-Medium";
   border: 1px solid #00053E;
 }
 .bootstrap-datetimepicker-widget table td.day:first-child {
@@ -380,6 +384,7 @@
 .bootstrap-datetimepicker-widget table td.active .day-content {
   background: #00053E;
   color: #fff;
+  font-family: "Roboto-Medium";
 }
 .bootstrap-datetimepicker-widget table td .day-content:hover {
   border: 2px solid #00053E80;
@@ -388,6 +393,7 @@
 .bootstrap-datetimepicker-widget table td.today .day-content{
   background: #eeeeee;
   color: #393939E6;
+  font-family: "Roboto-Medium";
   cursor: pointer;
 }
 .bootstrap-datetimepicker-widget table td.today.active .day-content {
@@ -520,7 +526,7 @@
   align-items: center;
   white-space: nowrap;
   font-weight: 600;
-  font-size: 14px;
+  font-size: 23px;
   border: none;
   padding: 0px 8px;
   min-width: 100px;

@@ -203,7 +203,7 @@
 }
 .bootstrap-datetimepicker-widget .picker-switch {
   text-align: center;
-  font-size: 18px;
+  font-size: 23px;
 }
 .bootstrap-datetimepicker-widget .picker-switch::after {
   position: absolute;

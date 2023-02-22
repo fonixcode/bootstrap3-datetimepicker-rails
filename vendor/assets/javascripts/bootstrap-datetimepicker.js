@@ -159,7 +159,8 @@
 
                 return returnMoment;
             },
-
+            hours = getMoment().hours(),
+            minutes = getMoment().minutes(),
             isEnabled = function (granularity) {
                 if (typeof granularity !== 'string' || granularity.length > 1) {
                     throw new TypeError('isEnabled expects a single character string parameter');
@@ -329,16 +330,14 @@
                 return ret;
             },
 
-            onChangeHours = function () {
+            onChangeHours = function (hours) {
                 $('.timepicker-hour').blur()
-                const hours = viewDate.hours()
                 $('.timepicker-hour').val(hours.toString().padStart(2, '0'))
                 return;
             },
 
-            onChangeMinutes = function () {
+            onChangeMinutes = function (minutes) {
                 $('.timepicker-minute').blur()
-                const minutes = viewDate.minutes()
                 $('.timepicker-minute').val(minutes.toString().padStart(2, '0'))
                 return;
             },
@@ -1010,7 +1009,7 @@
                 });
 
                 input.blur();
-                input.removeClass('focus');
+                input.removeClass('focus');    
                 viewDate = date.clone();
 
                 return picker;
@@ -1019,6 +1018,8 @@
             close = function () {
                 $('.timepicker-hour').blur();
                 $('.timepicker-minute').blur();
+                hours = getMoment().hours();
+                minutes = getMoment().minutes();
                 input.blur(); 
                 input.removeClass('focus');
                 input.val(date.format(actualFormat));
@@ -1040,7 +1041,6 @@
                 //inputDate.locale(options.locale);
                 return inputDate;
             },
-
             /********************************************************************************
              *
              * Widget UI interaction functions
@@ -1150,19 +1150,21 @@
                     widget.find('.timepicker-minute').focus();
                 },
                 incrementHours: function () {
-                    var newDate = date.clone().add(1, 'h');
-                    if (isValid(newDate, 'h')) {
-                        setValue(newDate);
-                        onChangeHours();
+                    $('.timepicker-hour').blur();
+                    hours++;
+                    if (hours > 23) {
+                        hours = 0;
                     }
+                    onChangeHours(hours)
                 },
 
                 incrementMinutes: function () {
-                    var newDate = date.clone().add(options.stepping, 'm');
-                    if (isValid(newDate, 'm')) {
-                        setValue(newDate);
-                        onChangeMinutes();
+                    $('.timepicker-minute').blur()
+                    minutes++;
+                    if (minutes > 59) {
+                        minutes = 0;
                     }
+                    onChangeMinutes(minutes);
                 },
 
                 incrementSeconds: function () {
@@ -1173,19 +1175,21 @@
                 },
 
                 decrementHours: function () {
-                    var newDate = date.clone().subtract(1, 'h');
-                    if (isValid(newDate, 'h')) {
-                        setValue(newDate);
-                        onChangeHours();
+                    $('.timepicker-hour').blur();
+                    hours--;
+                    if (hours > 23 || hours < 0) {
+                        hours = 0;
                     }
+                    onChangeHours(hours)
                 },
 
                 decrementMinutes: function () {
-                    var newDate = date.clone().subtract(options.stepping, 'm');
-                    if (isValid(newDate, 'm')) {
-                        setValue(newDate);
-                        onChangeMinutes();
+                    $('.timepicker-minute').blur();
+                    minutes--;
+                    if (minutes > 59 || minutes < 0) {
+                        minutes = 0;
                     }
+                    onChangeMinutes(minutes);
                 },
 
                 decrementSeconds: function () {
@@ -1291,6 +1295,8 @@
                 close: function () {
                     $('.timepicker-minute').blur()
                     $('.timepicker-hour').blur()
+                    date.minute(minutes)
+                    date.hour(hours)
                     input.removeClass('focus')
                     input.val(date.format(actualFormat));
                     hide();
@@ -2493,9 +2499,9 @@
                 if (hour < 0 || hour > 23) {
                     return;
                 }
+                hours = hour;
                 $(e.target).val(currentValue);
                 date.hour(hour);
-                setValue(date);
             })
             $(document).on('change', '.timepicker-minute', (e) => {
                 const currentValue = $(e.target).val() > 60 ? '59' : $(e.target).val().padStart(2, '0')
@@ -2503,9 +2509,9 @@
                 if (minute < 0 || minute > 60) {
                     return;
                 }
+                minutes = minute;
                 $(e.target).val(currentValue);
                 date.minute(minute);
-                setValue(date);
             })
             $(window).on('click', (e) => {
                 // if e.target is not the input and not a child of the input

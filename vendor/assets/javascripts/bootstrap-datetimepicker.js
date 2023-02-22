@@ -207,12 +207,12 @@
                 var newHeadTemplate = $('<div>').addClass('header-calendar')
                         .append($('<div>').addClass('month-header-content')
                                 .append($('<span>').addClass(`${options.icons.up} next`).attr('data-action', 'next'))
-                                .append($('<span>').addClass('picker-switch').attr('data-action', 'pickerSwitch'))
+                                .append($('<span>').addClass('picker-switch').attr('data-action', 'pickerSwitchMonth'))
                                 .append($('<span>').addClass(`${options.icons.down} previous`).attr('data-action', 'previous'))
                                 )
                         .append($('<div>').addClass('year-header-content datepicker-months')
                                 .append($('<span>').addClass(`${options.icons.up} next`).attr('data-action', 'next'))
-                                .append($('<span>').addClass('picker-switch').attr('data-action', 'pickerSwitch'))
+                                .append($('<span>').addClass('picker-switch').attr('data-action', 'pickerSwitchYear'))
                                 .append($('<span>').addClass(`${options.icons.down} previous`).attr('data-action', 'previous'))
                                 )
                 
@@ -1016,6 +1016,15 @@
                 return picker;
             },
 
+            close = function () {
+                $('.timepicker-hour').blur();
+                $('.timepicker-minute').blur();
+                input.blur(); 
+                input.removeClass('focus');
+                input.val(date.format(actualFormat));
+                hide();
+            },
+
             clear = function () {
                 setValue(null);
             },
@@ -1065,9 +1074,15 @@
                     fillDate();
                     viewUpdate(navFnc);
                 },
-
                 pickerSwitch: function () {
                     showMode(1);
+                },
+                pickerSwitchMonth: function () {
+                    showMode(1);
+                },
+
+                pickerSwitchYear: function () {
+                    showMode(2);
                 },
 
                 selectMonth: function (e) {
@@ -1347,10 +1362,6 @@
                 }
                 place();
                 widget.show();
-                input.addClass('focus')
-                if (options.focusOnShow && !input.is(':focus')) {
-                    input.addClass('focus');
-                }
 
                 notifyEvent({
                     type: 'dp.show'
@@ -1415,6 +1426,10 @@
 
             keyup = function (e) {
                 keyState[e.which] = 'r';
+                keyState[e.which] = 'escape';
+                if (e.which === 13) {
+                    close();
+                }
                 e.stopPropagation();
                 e.preventDefault();
             },
@@ -2492,6 +2507,15 @@
                 date.minute(minute);
                 setValue(date);
             })
+            $(window).on('click', (e) => {
+                // if e.target is not the input and not a child of the input
+                if (input.is(e.target)) return;
+                var container = $(".bootstrap-datetimepicker-widget");
+                if (!container.is(e.target) && container.has(e.target).length === 0) 
+                {
+                    hide();
+                }
+            });
         });
         return picker;
     };
@@ -2717,7 +2741,6 @@
                 }
             },
             enter: function () {
-                this.hide();
             },
             escape: function () {
                 this.hide();

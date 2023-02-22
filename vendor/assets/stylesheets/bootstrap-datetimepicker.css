@@ -93,7 +93,7 @@
 .bootstrap-datetimepicker-widget .timepicker-second {
   width: 30px;
   font-weight: bold;
-  font-size: 23px;
+  font-size: 17px;
   border: none;
   padding: 0;
   text-align: center;
@@ -203,7 +203,7 @@
 }
 .bootstrap-datetimepicker-widget .picker-switch {
   text-align: center;
-  font-size: 23px;
+  font-size: 17px;
 }
 .bootstrap-datetimepicker-widget .picker-switch::after {
   position: absolute;
@@ -234,12 +234,12 @@
 }
 
 .bootstrap-datetimepicker-widget table div.divider {
-  width: 85%;
+  width: 84%;
   height: 1.5px;
   background: #00053E;
   position: absolute;
-  left: 27px;
-  top: 104px;
+  left: 29px;
+  top: 100px;
 }
 
 .bootstrap-datetimepicker-widget table td,
@@ -256,7 +256,7 @@
 
 .bootstrap-datetimepicker-widget table th.dow {
   font-family: "Roboto-thin", Helvetica, Arial, sans-serif;
-  font-size: 20px
+  font-size: 15px;
 }
 .bootstrap-datetimepicker-widget table th:first-child {
   /* padding: 5px 12px 5px 0px !important; */
@@ -312,13 +312,13 @@
   background: #eeeeee;
 }
 .bootstrap-datetimepicker-widget table td .day-content {
-  border-radius: 18px;
-  width: 36px;
-  height: 36px;
+  border-radius: 13px;
+  width: 26px;
+  height: 26px;
   display: flex;
   justify-content: center;
   font-family: "Roboto";
-  font-size: 20px;
+  font-size: 15px;
   align-items: center;
 }
 .bootstrap-datetimepicker-widget table td {
@@ -526,7 +526,7 @@
   align-items: center;
   white-space: nowrap;
   font-weight: 600;
-  font-size: 23px;
+  font-size: 17px;
   border: none;
   padding: 0px 8px;
   min-width: 100px;

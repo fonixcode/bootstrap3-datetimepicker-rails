@@ -1018,8 +1018,6 @@
             close = function () {
                 $('.timepicker-hour').blur();
                 $('.timepicker-minute').blur();
-                hours = getMoment().hours();
-                minutes = getMoment().minutes();
                 input.blur(); 
                 input.removeClass('focus');
                 input.val(date.format(actualFormat));

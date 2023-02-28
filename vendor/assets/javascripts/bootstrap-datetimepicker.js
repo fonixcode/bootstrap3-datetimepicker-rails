@@ -1314,6 +1314,8 @@
              */
             show = function () {
                 input.attr("autocomplete", "off");
+                input.addClass('focus')
+                // hide all other widgets
                 var currentMoment,
                     useCurrentGranularity = {
                         'year': function (m) {

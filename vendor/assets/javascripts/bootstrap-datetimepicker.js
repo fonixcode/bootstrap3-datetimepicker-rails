@@ -126,7 +126,6 @@
                 46: 'delete'
             },
             keyState = {},
-
             /********************************************************************************
              *
              * Private functions
@@ -549,26 +548,6 @@
                     currentDate.add(1, 'd');
                 }
                 widget.find('.datepicker-days thead').append(row);
-                if (!options.sideBySide && hasDate() && hasTime()) {                 
-                    widget.find('.datepicker-days').append(
-                        $('<div>').addClass('footer-time')
-                        .append($('<div>').addClass('hours-footer-content')
-                            .append($('<span>').addClass(`${options.icons.previous} previous`).attr({ href: '#', tabindex: '-1', 'title': options.tooltips.decrementHour }).attr('data-action', 'decrementHours'))
-                            .append($('<input>').val(viewDate.hours().toString().padStart(2, '0')).addClass('timepicker-hour').attr({ 'data-time-component': 'hours', 'title': options.tooltips.pickHour, 'maxlength':"2" }).attr('data-action', 'focusHoursInput'))
-                            .append($('<span>').addClass(`${options.icons.next} next`).attr({ href: '#', tabindex: '-1', 'title': options.tooltips.incrementHour }).attr('data-action', 'incrementHours'))
-                            )
-                            .append($('<div>').addClass('separator')
-                                .append($('<span>').addClass('separator').html(':')))
-                        .append($('<div>').addClass('minutes-footer-content')
-                                .append($('<span>').addClass(`${options.icons.previous} previous`).attr({ href: '#', tabindex: '-1', 'title': options.tooltips.decrementMinute }).attr('data-action', 'decrementMinutes'))
-                                .append($('<input>').val(viewDate.minute().toString().padStart(2, '0')).addClass('timepicker-minute').attr({ 'data-time-component': 'minutes', 'title': options.tooltips.pickMinute, 'maxlength':"2" }).attr('data-action', 'focusMinutesInput'))
-                                .append($('<span>').addClass(`${options.icons.next} next`).attr({ href: '#', tabindex: '-1', 'title': options.tooltips.incrementMinute }).attr('data-action', 'incrementMinutes'))
-                                )
-                        .append($('<div>').addClass('button-area')
-                                .append($('<button>').addClass('primary-btn').html('Done').attr({ 'data-action': 'close', id: 'btn-done'}))
-                                )
-                    );
-                }
                 widget.find('.datepicker-days table').append("<div class='divider'></div>");
             },
 
@@ -978,6 +957,7 @@
              */
             hide = function () {
                 var transitioning = false;
+                input.removeClass('focus');
 
                 if (!widget) {
                     return picker;
@@ -1311,12 +1291,93 @@
                 actions[$(e.currentTarget).data('action')].apply(picker, arguments);
                 return false;
             },
+            overWrite = function (str, index, char) {
+                const newStr = str.split('');
+                if(index === 2) {
+                    newStr[1] = char;
+                    return newStr.join('');
+                }
+                // Replace the character at the index with the new character
+                if(str.length === 2){
+                    newStr[index] = char;
+                    return newStr.join('');
+                }
+                // Replace the character at the index with the new character
+                // str.substring(0, index) + char + str.substring(index + 1);           
+                return str;
+            },
 
+            showFooterTimer = function () {
+                widget.find('.datepicker-days').append(
+                    $('<div>').addClass('footer-time')
+                    .append($('<div>').addClass('hours-footer-content')
+                        .append($('<span>').addClass(`${options.icons.previous} previous`).attr({ href: '#', tabindex: '-1', 'title': options.tooltips.decrementHour }).attr('data-action', 'decrementHours'))
+                        .append($('<input>',{
+                            val: viewDate.hour().toString().padStart(2,'0'),
+                            class: 'timepicker-hour',
+                            title: options.tooltips.pickHour,
+                            maxlength: "2",
+                            id: 'hour-input',
+                            type: "text",
+                            onclick: "this.focus()",
+                            ondblclick: "this.select()"
+                        }))
+                        .append($('<span>').addClass(`${options.icons.next} next`).attr({ href: '#', tabindex: '-1', 'title': options.tooltips.incrementHour }).attr('data-action', 'incrementHours'))
+                        )
+                        .append($('<div>').addClass('separator')
+                            .append($('<span>').addClass('separator').html(':')))
+                    .append($('<div>').addClass('minutes-footer-content')
+                            .append($('<span>').addClass(`${options.icons.previous} previous`).attr({ href: '#', tabindex: '-1', 'title': options.tooltips.decrementMinute }).attr('data-action', 'decrementMinutes'))
+                            .append($('<input>',{
+                                val: viewDate.minute().toString().padStart(2,'0'),
+                                class: 'timepicker-minute',
+                                'data-time-component': 'minutes',
+                                title: options.tooltips.pickMinute,
+                                maxlength: "2",
+                                id: 'minute-input',
+                                type: "text",
+                                ondblclick: "this.select()",
+                                onclick: "this.focus()"
+                            }))
+                            .append($('<span>').addClass(`${options.icons.next} next`).attr({ href: '#', tabindex: '-1', 'title': options.tooltips.incrementMinute }).attr('data-action', 'incrementMinutes'))
+                            )
+                    .append($('<div>').addClass('button-area')
+                            .append($('<button>').addClass('primary-btn').html('Done').attr({ 'data-action': 'close', id: 'btn-done'}))
+                            )
+                );
+            },
+
+            setupInputs = function () {
+                $('#hour-input').on('keyup', function (e) {
+                    if (e.key === 'Enter') return;
+                    // const value = overWrite(this.value, this.selectionStart, e.key);
+                    const currentValue = this.value > 23 ? '23' : this.value || '00'
+                    const hour = parseInt(currentValue);
+                    if (hour < 0 || hour > 23) {
+                        return;
+                    }
+                    hours = hour;
+                    $(this).val(currentValue);
+                    date.hour(hour);
+                })
+                $('#minute-input').on('keyup', function (e) {
+                    if (e.key === 'Enter') return;
+                    const currentValue = this.value > 59 ? '59' : this.value || "00"
+                    const minute = parseInt(currentValue);
+                    if (minute < 0 || minute > 59) {
+                        return;
+                    }
+                    minutes = minute;
+                    $(this).val(currentValue);
+                    date.minute(minute);
+                })
+            },
             /**
              * Shows the widget. Possibly will emit dp.show and dp.change
              */
             show = function () {
                 input.attr("autocomplete", "off");
+                $(document.body).find('input.focus').removeClass('focus');
                 input.addClass('focus')
                 $(".bootstrap-datetimepicker-widget").hide();
                 // hide all other widgets
@@ -1366,13 +1427,15 @@
                 $(window).on('resize', place);
                 widget.on('click', '[data-action]', doAction); // this handles clicks on the widget
                 widget.on('mousedown', false);
-
+                if (!options.sideBySide && hasDate() && hasTime()) {                 
+                    showFooterTimer();
+                }
                 if (component && component.hasClass('btn')) {
                     component.toggleClass('active');
                 }
                 place();
                 widget.show();
-
+                setupInputs();
                 notifyEvent({
                     type: 'dp.show'
                 });
@@ -2499,16 +2562,10 @@
                     $('#btn-done').click();
                 }
             })
-            $(document).on('change', '.timepicker-hour', (e) => {
-                const currentValue = $(e.target).val() > 23 ? '23' : $(e.target).val().padStart(2, '0')
-                const hour = parseInt(currentValue);
-                if (hour < 0 || hour > 23) {
-                    return;
-                }
-                hours = hour;
-                $(e.target).val(currentValue);
-                date.hour(hour);
-            })
+            // $(document).on('keypress', '.timepicker-hour', (e) => {
+            //     console.log(overWrite($(e.target).val(), e.target.selectionStart, e.key))
+
+            // })
             $(document).on('change', '.timepicker-minute', (e) => {
                 const currentValue = $(e.target).val() > 60 ? '59' : $(e.target).val().padStart(2, '0')
                 const minute = parseInt(currentValue);

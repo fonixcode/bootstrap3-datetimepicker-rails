@@ -565,19 +565,3 @@
   gap: 0px !important;
 }
 
-.return-to-day{
-  display: flex;
-  justify-content: flex-end;
-}
-
-.return-to-day .picker-switch{
-  font-size: 14px;
-  padding: 6px 8px;
-  border-radius: 4px;
-}
-
-.return-to-day .picker-switch:hover{
-  background-color: #eeeeee;
-  cursor: pointer;
-}
-

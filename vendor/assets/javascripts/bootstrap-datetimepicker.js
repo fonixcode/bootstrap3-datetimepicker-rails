@@ -236,28 +236,19 @@
                         .append($('<table>').addClass('table-condensed')
                             .append(headTemplate.clone())
                             .append(contTemplate.clone())
-                            ).append($('<div>').addClass('return-to-day').append(
-                                $('<span>').addClass('picker-switch').attr('data-action', 'pickerSwitchDay').html('Day')
-                                .append($('<span>').addClass(options.icons.next))
-                            ))
+                            )
                             ,
                     $('<div>').addClass('datepicker-years')
                         .append($('<table>').addClass('table-condensed')
                             .append(headTemplate.clone())
                             .append(contTemplate.clone())
-                            ).append($('<div>').addClass('return-to-day').append(
-                                $('<span>').addClass('picker-switch').attr('data-action', 'pickerSwitchDay').html('Day')
-                                .append($('<span>').addClass(options.icons.next))
-                            ))
+                            )
                             ,
                     $('<div>').addClass('datepicker-decades')
                         .append($('<table>').addClass('table-condensed')
                             .append(headTemplate.clone())
                             .append(contTemplate.clone())
-                            ).append($('<div>').addClass('return-to-day').append(
-                                $('<span>').addClass('picker-switch').attr('data-action', 'pickerSwitchDay').html('Day')
-                                .append($('<span>').addClass(options.icons.next))
-                            ))
+                            )
                 ];
             },
 
@@ -1083,9 +1074,6 @@
                     fillDate();
                     viewUpdate(navFnc);
                 },
-                pickerSwitchDay: function () {
-                    showMode(- currentViewMode);
-                },
                 pickerSwitch: function () {
                     showMode(1);
                 },
@@ -1106,7 +1094,7 @@
                             hide();
                         }
                     } else {
-                        showMode(-1);
+                        showMode(-currentViewMode);
                         fillDate();
                     }
                     viewUpdate('M');
@@ -1121,7 +1109,7 @@
                             hide();
                         }
                     } else {
-                        showMode(-1);
+                        showMode(-currentViewMode);
                         fillDate();
                     }
                     viewUpdate('YYYY');
@@ -1136,7 +1124,7 @@
                             hide();
                         }
                     } else {
-                        showMode(-1);
+                        showMode(-currentViewMode);
                         fillDate();
                     }
                     viewUpdate('YYYY');

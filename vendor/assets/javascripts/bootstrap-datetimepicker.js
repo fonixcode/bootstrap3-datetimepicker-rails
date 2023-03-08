@@ -565,7 +565,7 @@
                                 .append($('<span>').addClass(`${options.icons.next} next`).attr({ href: '#', tabindex: '-1', 'title': options.tooltips.incrementMinute }).attr('data-action', 'incrementMinutes'))
                                 )
                         .append($('<div>').addClass('button-area')
-                                .append($('<button>').addClass('primary-btn').html('Done').attr({ 'data-action': 'close'}))
+                                .append($('<button>').addClass('primary-btn').html('Done').attr({ 'data-action': 'close', id: 'btn-done'}))
                                 )
                     );
                 }
@@ -978,6 +978,7 @@
              */
             hide = function () {
                 var transitioning = false;
+
                 if (!widget) {
                     return picker;
                 }
@@ -1317,6 +1318,7 @@
             show = function () {
                 input.attr("autocomplete", "off");
                 input.addClass('focus')
+                $(".bootstrap-datetimepicker-widget").hide();
                 // hide all other widgets
                 var currentMoment,
                     useCurrentGranularity = {
@@ -1435,9 +1437,6 @@
             keyup = function (e) {
                 keyState[e.which] = 'r';
                 keyState[e.which] = 'escape';
-                if (e.which === 13) {
-                    close();
-                }
                 e.stopPropagation();
                 e.preventDefault();
             },
@@ -2495,6 +2494,11 @@
             show();
         }
         $(document).on('ready', () => {
+            $(document).on('keypress', (e) => {
+                if (e.keyCode === 13) {
+                    $('#btn-done').click();
+                }
+            })
             $(document).on('change', '.timepicker-hour', (e) => {
                 const currentValue = $(e.target).val() > 23 ? '23' : $(e.target).val().padStart(2, '0')
                 const hour = parseInt(currentValue);
@@ -2516,11 +2520,11 @@
                 date.minute(minute);
             })
             $(window).on('click', (e) => {
-                // if e.target is not the input and not a child of the input
                 if (input.is(e.target)) return;
                 var container = $(".bootstrap-datetimepicker-widget");
                 if (!container.is(e.target) && container.has(e.target).length === 0) 
                 {
+                    // if e.target is not the input and not a child of the input
                     hide();
                 }
             });
@@ -2748,8 +2752,8 @@
                     this.date(d.clone().add(1, 'M'));
                 }
             },
-            enter: function () {
-            },
+            // enter: function () {
+            // },
             escape: function () {
                 this.hide();
             },

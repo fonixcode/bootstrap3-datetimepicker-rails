@@ -1004,6 +1004,7 @@
                 input.blur(); 
                 input.removeClass('focus');
                 input.val(date.format(actualFormat));
+                setValue(parseInputDate(input.val().trim()));
                 hide();
             },
 
@@ -1280,6 +1281,7 @@
                     date.hour(hours)
                     input.removeClass('focus')
                     input.val(date.format(actualFormat));
+                    setValue(parseInputDate(input.val().trim()));
                     hide();
                 }
             },
@@ -1291,22 +1293,6 @@
                 actions[$(e.currentTarget).data('action')].apply(picker, arguments);
                 return false;
             },
-            overWrite = function (str, index, char) {
-                const newStr = str.split('');
-                if(index === 2) {
-                    newStr[1] = char;
-                    return newStr.join('');
-                }
-                // Replace the character at the index with the new character
-                if(str.length === 2){
-                    newStr[index] = char;
-                    return newStr.join('');
-                }
-                // Replace the character at the index with the new character
-                // str.substring(0, index) + char + str.substring(index + 1);           
-                return str;
-            },
-
             showFooterTimer = function () {
                 widget.find('.datepicker-days').append(
                     $('<div>').addClass('footer-time')
@@ -1347,28 +1333,19 @@
                 );
             },
 
-            setupInputs = function () {
-                $('#hour-input').on('keyup', function (e) {
-                    if (e.key === 'Enter') return;
-                    // const value = overWrite(this.value, this.selectionStart, e.key);
+            setupInputs = function () {                
+                $('#hour-input').on('blur', function () {
                     const currentValue = this.value > 23 ? '23' : this.value || '00'
                     const hour = parseInt(currentValue);
-                    if (hour < 0 || hour > 23) {
-                        return;
-                    }
-                    hours = hour;
                     $(this).val(currentValue);
+                    hours = hour;
                     date.hour(hour);
                 })
-                $('#minute-input').on('keyup', function (e) {
-                    if (e.key === 'Enter') return;
+                $('#minute-input').on('blur', function () {
                     const currentValue = this.value > 59 ? '59' : this.value || "00"
                     const minute = parseInt(currentValue);
-                    if (minute < 0 || minute > 59) {
-                        return;
-                    }
-                    minutes = minute;
                     $(this).val(currentValue);
+                    minutes = minute;
                     date.minute(minute);
                 })
             },
@@ -2561,20 +2538,6 @@
                 if (e.keyCode === 13) {
                     $('#btn-done').click();
                 }
-            })
-            // $(document).on('keypress', '.timepicker-hour', (e) => {
-            //     console.log(overWrite($(e.target).val(), e.target.selectionStart, e.key))
-
-            // })
-            $(document).on('change', '.timepicker-minute', (e) => {
-                const currentValue = $(e.target).val() > 60 ? '59' : $(e.target).val().padStart(2, '0')
-                const minute = parseInt(currentValue);
-                if (minute < 0 || minute > 60) {
-                    return;
-                }
-                minutes = minute;
-                $(e.target).val(currentValue);
-                date.minute(minute);
             })
             $(window).on('click', (e) => {
                 if (input.is(e.target)) return;

@@ -1077,6 +1077,7 @@
                         }
                     } else {
                         showMode(-currentViewMode);
+                        setValue(date.clone().year(viewDate.year()).month(viewDate.month()));
                         fillDate();
                     }
                     viewUpdate('M');
@@ -1092,6 +1093,7 @@
                         }
                     } else {
                         showMode(-currentViewMode);
+                        setValue(date.clone().year(viewDate.year()).month(viewDate.month()));
                         fillDate();
                     }
                     viewUpdate('YYYY');

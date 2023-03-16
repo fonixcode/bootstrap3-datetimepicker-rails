@@ -1303,11 +1303,9 @@
                         .append($('<input>',{
                             val: viewDate.hour().toString().padStart(2,'0'),
                             class: 'timepicker-hour',
-                            title: options.tooltips.pickHour,
                             maxlength: "2",
                             id: 'hour-input',
                             type: "text",
-                            onclick: "this.focus()",
                         }))
                         .append($('<span>').addClass(`${options.icons.next} next`).attr({ href: '#', tabindex: '-1', 'title': options.tooltips.incrementHour }).attr('data-action', 'incrementHours'))
                         )
@@ -1319,11 +1317,9 @@
                                 val: viewDate.minute().toString().padStart(2,'0'),
                                 class: 'timepicker-minute',
                                 'data-time-component': 'minutes',
-                                title: options.tooltips.pickMinute,
                                 maxlength: "2",
                                 id: 'minute-input',
                                 type: "text",
-                                onclick: "this.focus()",
                             }))
                             .append($('<span>').addClass(`${options.icons.next} next`).attr({ href: '#', tabindex: '-1', 'title': options.tooltips.incrementMinute }).attr('data-action', 'incrementMinutes'))
                             )

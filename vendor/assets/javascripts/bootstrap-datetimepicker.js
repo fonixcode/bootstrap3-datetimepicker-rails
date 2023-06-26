@@ -1373,7 +1373,8 @@
                         }
                     };
 
-                if (input.prop('disabled') || (!options.ignoreReadonly && input.prop('readonly')) || widget) {
+                if (input.prop('disabled') || (!options.ignoreReadonly && input.prop('readonly'))) {
+                    console.log('returned')
                     return picker;
                 }
                 if (input.val() !== undefined && input.val().trim().length !== 0) {

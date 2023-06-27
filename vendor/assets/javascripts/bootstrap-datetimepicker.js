@@ -1374,7 +1374,6 @@
                     };
 
                 if (input.prop('disabled') || (!options.ignoreReadonly && input.prop('readonly'))) {
-                    console.log('returned')
                     return picker;
                 }
                 if (input.val() !== undefined && input.val().trim().length !== 0) {
@@ -2530,12 +2529,9 @@
         if (options.inline) {
             show();
         }
-        $(document).on('ready', () => {
-            $(document).on('keypress', (e) => {
-                if (e.keyCode === 13) {
-                    $('#btn-done').click();
-                }
-            })
+
+
+        $(document).ready(function() {
             $(window).on('click', (e) => {
                 if (input.is(e.target)) return;
                 var container = $(".bootstrap-datetimepicker-widget");
@@ -2545,6 +2541,15 @@
                     hide();
                 }
             });
+        });
+
+
+        $(document).on('ready', () => {
+            $(document).on('keypress', (e) => {
+                if (e.keyCode === 13) {
+                    $('#btn-done').click();
+                }
+            })
         });
         return picker;
     };

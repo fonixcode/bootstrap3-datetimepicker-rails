@@ -1284,6 +1284,7 @@
                     input.removeClass('focus')
                     input.val(date.format(actualFormat));
                     setValue(parseInputDate(input.val().trim()));
+                    $(input).trigger('dp.change')
                     hide();
                 }
             },

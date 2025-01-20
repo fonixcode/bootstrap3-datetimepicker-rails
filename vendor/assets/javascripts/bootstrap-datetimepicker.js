@@ -332,15 +332,25 @@
             },
 
             onChangeHours = function (hours) {
-                $('.timepicker-hour').blur()
-                $('.timepicker-hour').val(hours.toString().padStart(2, '0'))
-                return;
+                $('.timepicker-hour').blur();
+                $('.timepicker-hour').val(hours.toString().padStart(2, '0'));
+
+                const newDate = date.clone().hours(hours);
+
+                if (isValid(newDate, 'h')) {
+                    setValue(newDate);
+                }
             },
 
             onChangeMinutes = function (minutes) {
-                $('.timepicker-minute').blur()
-                $('.timepicker-minute').val(minutes.toString().padStart(2, '0'))
-                return;
+                $('.timepicker-minute').blur();
+                $('.timepicker-minute').val(minutes.toString().padStart(2, '0'));
+
+                const newDate = date.clone().minutes(minutes);
+
+                if (isValid(newDate, 'm')) {
+                    setValue(newDate);
+                }
             },
 
             getToolbar = function () {

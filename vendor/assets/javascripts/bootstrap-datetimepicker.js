@@ -206,14 +206,14 @@
                     
                 var newHeadTemplate = $('<div>').addClass('header-calendar')
                         .append($('<div>').addClass('month-header-content')
-                                .append($('<span>').addClass(`${options.icons.up} next`).attr('data-action', 'next'))
+                                .append($('<span>').addClass(`${options.icons.up} previous`).attr('data-action', 'previous'))
                                 .append($('<span>').addClass('picker-switch').attr('data-action', 'pickerSwitchMonth'))
-                                .append($('<span>').addClass(`${options.icons.down} previous`).attr('data-action', 'previous'))
+                                .append($('<span>').addClass(`${options.icons.down} next`).attr('data-action', 'next'))
                                 )
                         .append($('<div>').addClass('year-header-content datepicker-months')
-                                .append($('<span>').addClass(`${options.icons.up} next`).attr('data-action', 'next'))
+                                .append($('<span>').addClass(`${options.icons.up} previous`).attr('data-action', 'previous'))
                                 .append($('<span>').addClass('picker-switch').attr('data-action', 'pickerSwitchYear'))
-                                .append($('<span>').addClass(`${options.icons.down} previous`).attr('data-action', 'previous'))
+                                .append($('<span>').addClass(`${options.icons.down} next`).attr('data-action', 'next'))
                                 )
                 
                 var dayHeadTemplate =  $('<thead>')
@@ -744,12 +744,12 @@
                 if (!hasDate()) {
                     return;
                 }
-                daysViewHeader.eq(0).find('span').eq(0).attr('title', options.tooltips.nextMonth);
+                daysViewHeader.eq(0).find('span').eq(0).attr('title', options.tooltips.prevMonth);
                 daysViewHeader.eq(0).find('span').eq(1).attr('title', options.tooltips.selectMonth);
-                daysViewHeader.eq(0).find('span').eq(2).attr('title', options.tooltips.prevMonth);
-                yearsViewHeader.eq(0).find('span').eq(0).attr('title', options.tooltips.nextYear);
+                daysViewHeader.eq(0).find('span').eq(2).attr('title', options.tooltips.nextMonth);
+                yearsViewHeader.eq(0).find('span').eq(0).attr('title', options.tooltips.prevYear);
                 yearsViewHeader.eq(0).find('span').eq(1).attr('title', options.tooltips.selectYear);
-                yearsViewHeader.eq(0).find('span').eq(2).attr('title', options.tooltips.prevYear);
+                yearsViewHeader.eq(0).find('span').eq(2).attr('title', options.tooltips.nextYear);
 
 
                 daysView.find('.disabled').removeClass('disabled');

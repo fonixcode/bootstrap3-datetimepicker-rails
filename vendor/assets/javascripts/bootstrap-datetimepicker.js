@@ -203,7 +203,7 @@
                                 .append($('<span>').addClass(options.icons.next))
                                 )
                             )
-                    
+
                 var newHeadTemplate = $('<div>').addClass('header-calendar')
                         .append($('<div>').addClass('month-header-content')
                                 .append($('<span>').addClass(`${options.icons.up} previous`).attr('data-action', 'previous'))
@@ -215,7 +215,7 @@
                                 .append($('<span>').addClass('picker-switch').attr('data-action', 'pickerSwitchYear'))
                                 .append($('<span>').addClass(`${options.icons.down} next`).attr('data-action', 'next'))
                                 )
-                
+
                 var dayHeadTemplate =  $('<thead>')
                 .append($('<tr>'))
                             ,
@@ -1002,7 +1002,7 @@
                 });
 
                 input.blur();
-                input.removeClass('focus');    
+                input.removeClass('focus');
                 viewDate = date.clone();
 
                 return picker;
@@ -1011,7 +1011,7 @@
             close = function () {
                 $('.timepicker-hour').blur();
                 $('.timepicker-minute').blur();
-                input.blur(); 
+                input.blur();
                 input.removeClass('focus');
                 input.val(date.format(actualFormat));
                 setValue(parseInputDate(input.val().trim()));
@@ -1046,7 +1046,7 @@
                             navFnc = datePickerModes[currentViewMode].navFnc;
                         }else{
                             navFnc = datePickerModes[1].navFnc;
-                        }    
+                        }
                     }
                     viewDate.add(datePickerModes[currentViewMode].navStep, navFnc);
                     fillDate();
@@ -1060,7 +1060,7 @@
                             navFnc = datePickerModes[currentViewMode].navFnc;
                         }else{
                             navFnc = datePickerModes[1].navFnc;
-                        }    
+                        }
                     }
                     viewDate.subtract(datePickerModes[currentViewMode].navStep, navFnc);
                     fillDate();
@@ -1340,7 +1340,7 @@
                 );
             },
 
-            setupInputs = function () {                
+            setupInputs = function () {
                 $(input).parent().find('#hour-input').on('blur', function () {
                     const currentValue = this.value > 23 ? '23' : this.value || '00'
                     const hour = parseInt(currentValue);
@@ -1411,7 +1411,7 @@
                 $(window).on('resize', place);
                 widget.on('click', '[data-action]', doAction); // this handles clicks on the widget
                 if(!hasTime()) widget.on('mousedown', false);
-                if (!options.sideBySide && hasDate() && hasTime()) {                 
+                if (!options.sideBySide && hasDate() && hasTime()) {
                     showFooterTimer();
                 }
                 if (component && component.hasClass('btn')) {
@@ -2546,7 +2546,7 @@
             $(window).on('click', (e) => {
                 if (input.is(e.target)) return;
                 var container = $(".bootstrap-datetimepicker-widget");
-                if (!container.is(e.target) && container.has(e.target).length === 0) 
+                if (!container.is(e.target) && container.has(e.target).length === 0)
                 {
                     // if e.target is not the input and not a child of the input
                     hide();

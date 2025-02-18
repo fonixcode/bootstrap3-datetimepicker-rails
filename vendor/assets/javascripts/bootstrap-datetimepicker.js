@@ -1341,14 +1341,14 @@
             },
 
             setupInputs = function () {                
-                $('#hour-input').on('blur', function () {
+                $(input).parent().find('#hour-input').on('blur', function () {
                     const currentValue = this.value > 23 ? '23' : this.value || '00'
                     const hour = parseInt(currentValue);
                     $(this).val(currentValue);
                     hours = hour;
                     date.hour(hour);
                 })
-                $('#minute-input').on('blur', function () {
+                $(input).parent().find('#minute-input').on('blur', function () {
                     const currentValue = this.value > 59 ? '59' : this.value || "00"
                     const minute = parseInt(currentValue);
                     $(this).val(currentValue);

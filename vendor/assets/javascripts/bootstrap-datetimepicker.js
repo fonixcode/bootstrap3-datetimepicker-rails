@@ -332,8 +332,8 @@
             },
 
             onChangeHours = function (hours) {
-                $('.timepicker-hour').blur();
-                $('.timepicker-hour').val(hours.toString().padStart(2, '0'));
+                $(input).parent().find('.timepicker-hour').blur();
+                $(input).parent().find('.timepicker-hour').val(hours.toString().padStart(2, '0'));
 
                 const newDate = date.clone().hours(hours);
 
@@ -343,8 +343,8 @@
             },
 
             onChangeMinutes = function (minutes) {
-                $('.timepicker-minute').blur();
-                $('.timepicker-minute').val(minutes.toString().padStart(2, '0'));
+                $(input).parent().find('.timepicker-minute').blur();
+                $(input).parent().find('.timepicker-minute').val(minutes.toString().padStart(2, '0'));
 
                 const newDate = date.clone().minutes(minutes);
 
@@ -1009,8 +1009,8 @@
             },
 
             close = function () {
-                $('.timepicker-hour').blur();
-                $('.timepicker-minute').blur();
+                $(input).parent().find('.timepicker-hour').blur();
+                $(input).parent().find('.timepicker-minute').blur();
                 input.blur();
                 input.removeClass('focus');
                 input.val(date.format(actualFormat));
@@ -1144,7 +1144,7 @@
                     widget.find('.timepicker-minute').focus();
                 },
                 incrementHours: function () {
-                    $('.timepicker-hour').blur();
+                    $(input).parent().find('.timepicker-hour').blur();
                     hours++;
                     if (hours > 23) {
                         hours = 0;
@@ -1153,7 +1153,7 @@
                 },
 
                 incrementMinutes: function () {
-                    $('.timepicker-minute').blur()
+                    $(input).parent().find('.timepicker-minute').blur()
                     minutes++;
                     if (minutes > 59) {
                         minutes = 0;
@@ -1169,7 +1169,7 @@
                 },
 
                 decrementHours: function () {
-                    $('.timepicker-hour').blur();
+                    $(input).parent().find('.timepicker-hour').blur();
                     hours--;
                     if (hours > 23 || hours < 0) {
                         hours = 0;
@@ -1178,7 +1178,7 @@
                 },
 
                 decrementMinutes: function () {
-                    $('.timepicker-minute').blur();
+                    $(input).parent().find('.timepicker-minute').blur();
                     minutes--;
                     if (minutes > 59 || minutes < 0) {
                         minutes = 0;
@@ -1287,8 +1287,8 @@
                 },
 
                 close: function () {
-                    $('.timepicker-minute').blur()
-                    $('.timepicker-hour').blur()
+                    $(input).parent().find('.timepicker-minute').blur()
+                    $(input).parent().find('.timepicker-hour').blur()
                     date.minute(minutes)
                     date.hour(hours)
                     input.removeClass('focus')

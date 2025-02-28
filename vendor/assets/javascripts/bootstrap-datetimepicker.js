@@ -932,13 +932,12 @@
                 if (isValid(targetMoment)) {
                     date = targetMoment;
                     viewDate = date.clone();
-                    if(!hasTime()) {
-                        input.val(date.format(actualFormat))
-                        input.removeClass('focus');
-                    }
+                    input.val(date.format(actualFormat));
+                    input.removeClass('focus');
                     element.data('date', date.format(actualFormat));
                     unset = false;
                     update();
+
                     notifyEvent({
                         type: 'dp.change',
                         date: date.clone(),
